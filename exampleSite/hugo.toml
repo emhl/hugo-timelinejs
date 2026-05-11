@@ -1,0 +1,9 @@
+baseURL = 'https://example.org/'
+locale = 'en-us'
+title = 'Example Timeline'
+
+[module]
+[[module.imports]]
+    path = 'github.com/emhl/hugo-timelinejs'
+[[module.imports]]
+    path = 'github.com/gohugo-ananke/ananke/v2'

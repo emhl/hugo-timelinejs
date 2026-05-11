@@ -1,0 +1,4 @@
+github.com/emhl/hugo-timelinejs v0.0.0-20260511122959-36eb990494f8 h1:BVjCmHzvUOs7qxTu7JniPBbfYoV5udrMK8gxBZ/1z9w=
+github.com/emhl/hugo-timelinejs v0.0.0-20260511122959-36eb990494f8/go.mod h1:4MAXTnsdlVMA1Sw1EP61PjOiakQou92fBNEEbRunmlc=
+github.com/gohugo-ananke/ananke/v2 v2.13.0 h1:V/cUloKhL5aIqkmS10fDpCOMg+W8XMgDbX0qIewS0KQ=
+github.com/gohugo-ananke/ananke/v2 v2.13.0/go.mod h1:HLy3O8WIkY0EmkMryllP6ilZVvAWz1XsLnfYLuD7dvE=
