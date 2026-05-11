@@ -1,0 +1,18 @@
+{{ $timelineStyles := resources.Get "css/timeline.css" | resources.ExecuteAsTemplate "css/timeline.css" . | minify | fingerprint -}}
+<link title="timeline-styles" rel="stylesheet"  href="{{ $timelineStyles.RelPermalink }}" {{ printf "integrity=%q" $timelineStyles.Data.Integrity | safeHTMLAttr }}>
+{{ $timelineScript := resources.Get "js/timeline.js" | fingerprint -}}
+<script src="{{ $timelineScript.RelPermalink }}" {{ printf "integrity=%q" $timelineScript.Data.Integrity | safeHTMLAttr }} type="text/javascript"></script>
+
+{{ $width := .Get "width" | default "100%" }}
+{{ $height := .Get "height" | default "600px" }}
+{{ $data := .Get "data" | default (.Get 0) | default "timelines/example.json" }}
+{{ $hashBookmark := .Get "hashBookmark" | default "false" }}
+
+<div id='timeline-embed' style="width {{$width}}; height: {{$height}}"></div>
+<script type="text/javascript">
+    data = {{ with resources.Get $data}} {{ .Content | safeJS }} {{ end }}
+    options = {
+	hash_bookmark: {{$hashBookmark}},
+    }
+    timeline = new TL.Timeline('timeline-embed', data, options);
+</script>

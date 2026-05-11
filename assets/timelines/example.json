@@ -1,0 +1,37 @@
+{
+    "title": {
+       "text": {
+         "headline": "Sh*t People Say",
+         "text": "People say stuff"
+       },
+      "start_date": { "year": 2012, "month": 1, "day": 26 }
+    },
+    "events": [
+      {
+        "start_date": { "year": 2011, "month": 12, "day": 12 },
+        "end_date": { "year": 2011, "month": 1, "day": 27 },
+        "text": {
+            "headline": "Sh*t Graphic Designers Say",
+            "text": ""
+        },
+        "media": {
+          "url": "http://youtu.be/KsT3QTmsN5Q",
+          "credit": "",
+          "caption": ""
+        }
+      },
+      {
+        "start_date": { "year": 2012, "month": 1, "day": 26 },
+        "end_date": { "year": 2012, "month": 1, "day": 27 },
+        "text": {
+            "headline": "Sh*t Politicians Say",
+            "text": "<p>In true political fashion, his character rattles off common jargon heard from people running for office.</p>"
+        },
+        "media": {
+          "url": "http://youtu.be/u4XpeU9erbg",
+          "credit": "",
+          "caption": ""
+        }
+      }
+    ]
+}
