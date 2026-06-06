@@ -1,4 +1,4 @@
-{{ $timelineStyles := resources.Get "css/timeline.css" | resources.ExecuteAsTemplate "css/timeline.css" . | minify | fingerprint -}}
+{{ $timelineStyles := resources.Get "css/timeline.css" | minify | fingerprint -}}
 <link title="timeline-styles" rel="stylesheet"  href="{{ $timelineStyles.RelPermalink }}" {{ printf "integrity=%q" $timelineStyles.Data.Integrity | safeHTMLAttr }}>
 {{ $timelineScript := resources.Get "js/timeline.js" | fingerprint -}}
 <script src="{{ $timelineScript.RelPermalink }}" {{ printf "integrity=%q" $timelineScript.Data.Integrity | safeHTMLAttr }} type="text/javascript"></script>
