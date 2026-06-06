@@ -9,15 +9,20 @@
 {{- else -}}
   {{- $s := string $d -}}
   {{- if findRE `^\d{4}$` $s -}}
-    {{- $res = (dict "year" (int $s)) -}}
+    {{- $res = (dict "year" (int (strings.TrimLeft "0" $s | default "0"))) -}}
   {{- else -}}
     {{- $t := false -}}
     {{- if findRE `^\d{4}-\d{2}-\d{2}` $s -}}
       {{- $t = time $s -}}
+    {{- else if findRE `^\d{4}-\d{2}` $s -}}
+      {{- $parts := split $s "-" -}}
+      {{- $year := int (strings.TrimLeft "0" (index $parts 0) | default "0") -}}
+      {{- $month := int (strings.TrimLeft "0" (index $parts 1) | default "0") -}}
+      {{- $res = (dict "year" $year "month" $month) -}}
     {{- end -}}
     {{- if $t -}}
       {{- $res = (dict "year" $t.Year "month" (int $t.Month) "day" $t.Day "hour" $t.Hour "minute" $t.Minute "second" $t.Second) -}}
-    {{- else -}}
+    {{- else if not $res -}}
       {{- $res = (dict "display_date" $s) -}}
     {{- end -}}
   {{- end -}}
