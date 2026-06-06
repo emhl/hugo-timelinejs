@@ -2,8 +2,8 @@
 {{- $res := dict -}}
 
 {{/* Text */}}
-{{- $headline := $s.headline | default "" -}}
-{{- $text := $s.text | default "" -}}
+{{- $headline := $s.headline | default "" | markdownify -}}
+{{- $text := $s.text | default "" | markdownify -}}
 {{- if or $headline $text -}}
   {{- $res = merge $res (dict "text" (dict "headline" $headline "text" $text)) -}}
 {{- end -}}
@@ -19,7 +19,14 @@
 {{/* Media */}}
 {{- with $s.media -}}
   {{- if reflect.IsMap . -}}
-    {{- $res = merge $res (dict "media" .) -}}
+    {{- $m := . -}}
+    {{- if $m.caption -}}
+      {{- $m = merge $m (dict "caption" ($m.caption | markdownify)) -}}
+    {{- end -}}
+    {{- if $m.credit -}}
+      {{- $m = merge $m (dict "credit" ($m.credit | markdownify)) -}}
+    {{- end -}}
+    {{- $res = merge $res (dict "media" $m) -}}
   {{- else -}}
     {{- $res = merge $res (dict "media" (dict "url" .)) -}}
   {{- end -}}
@@ -37,7 +44,11 @@
 {{/* Pass through other fields */}}
 {{- range $k, $v := $s -}}
   {{- if not (in (slice "headline" "text" "date" "end" "media" "background") $k) -}}
-    {{- $res = merge $res (dict $k $v) -}}
+    {{- $val := $v -}}
+    {{- if in (slice "display_date" "group") $k -}}
+      {{- $val = $val | markdownify -}}
+    {{- end -}}
+    {{- $res = merge $res (dict $k $val) -}}
   {{- end -}}
 {{- end -}}
 

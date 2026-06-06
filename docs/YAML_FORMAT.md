@@ -13,14 +13,14 @@ Every slide (whether it's the `title` slide, an item in `events`, or an item in 
 
 | Field | Description | JSON Equivalent |
 | :--- | :--- | :--- |
-| `headline` | The slide title (HTML supported). | `text.headline` |
-| `text` | The body text of the slide (HTML supported). | `text.text` |
+| `headline` | The slide title (Markdown/HTML supported). | `text.headline` |
+| `text` | The body text of the slide (Markdown/HTML supported). | `text.text` |
 | `date` | The start date. Supports Hugo date objects, "YYYY-MM-DD" strings, or "YYYY". | `start_date` |
 | `end` | The end date. Same format as `date`. | `end_date` |
 | `media` | A URL string (shortcut) or a full Map (see Media section). | `media` |
 | `background` | A URL/Color string (shortcut) or a full Map. | `background` |
-| `group` | (Events only) Used to group events visually. | `group` |
-| `display_date` | A string to override how the date is displayed. | `display_date` |
+| `group` | (Events only) Used to group events visually (Markdown/HTML supported). | `group` |
+| `display_date` | A string to override how the date is displayed (Markdown/HTML supported). | `display_date` |
 
 ## Date Handling
 
@@ -46,10 +46,12 @@ Or a map for full control:
 ```yaml
 media:
   url: "https://example.com/image.jpg"
-  caption: "An amazing photo"
+  caption: "An amazing **photo**"
   credit: "John Doe"
   alt: "Alternative text"
 ```
+
+The `caption` and `credit` fields also support Markdown and HTML.
 
 ## Background Handling
 
