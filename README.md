@@ -46,8 +46,13 @@ or for JSON:
 ```
 
 ### Additional options
-if you want you can change [some options](https://timeline.knightlab.com/docs/options.html) from the shortcode parameter as well. currently availible are:
-- `data`: Path to JSON Object containing the Data
-- `height`: The height of the timeline
-- `width`: The width of the timeline.
-- `hashBookmark`: If set to true, TimelineJS will update the browser URL each time a slide advances, so that people can link directly to specific slides,
+If you want you can change [some options](https://timeline.knightlab.com/docs/options.html) from the shortcode parameters as well. Currently available are:
+- `data`: Path to the JSON or YAML file containing the timeline data (relative to `assets/`).
+- `height`: The height of the timeline (default: `600px`).
+- `width`: The width of the timeline (default: `100%`).
+- `hashBookmark`: If set to `true`, TimelineJS will update the browser URL each time a slide advances, allowing direct links to specific slides.
+- `lang`: The language code for the UI (e.g., `de`, `fr`, `es`). Defaults to the current Hugo page language. Over 60 locale definitions are included in the module.
+- `font`: The name of a built-in font combination (e.g., `Amatic-Andika`, `Bevan-PontanoSans`). 
+- `theme`: The name of a built-in theme (e.g., `dark`, `contrast`).
+
+*Note: While the `font` and `theme` parameters are supported, the corresponding CSS files are not bundled by default to keep the module lightweight. If you wish to use them, ensure you provide the necessary CSS files in your site's `static/` directory.*
