@@ -5,12 +5,22 @@
 
 {{ $width := .Get "width" | default "100%" }}
 {{ $height := .Get "height" | default "600px" }}
-{{ $data := .Get "data" | default (.Get 0) | default "timelines/example.json" }}
+{{ $data := .Get "data" | default (.Get 0) | default "timelines/example.yaml" }}
 {{ $hashBookmark := .Get "hashBookmark" | default "false" }}
+
+{{ $dataRes := resources.Get $data }}
+{{ $dataJSON := "" }}
+{{ if $dataRes }}
+    {{ if or (strings.HasSuffix $data ".yaml") (strings.HasSuffix $data ".yml") }}
+        {{ $dataJSON = partial "timelinejs/transpile.html" ($dataRes | unmarshal) | jsonify }}
+    {{ else }}
+        {{ $dataJSON = $dataRes.Content }}
+    {{ end }}
+{{ end }}
 
 <div id='timeline-embed' style="width {{$width}}; height: {{$height}}"></div>
 <script type="text/javascript">
-    data = {{ with resources.Get $data}} {{ .Content | safeJS }} {{ end }}
+    data = {{ $dataJSON | safeJS }}
     options = {
 	hash_bookmark: {{$hashBookmark}},
     }

@@ -1,0 +1,31 @@
+{{- $raw := . -}}
+{{- $timeline := dict -}}
+
+{{- with $raw.title -}}
+  {{- $timeline = merge $timeline (dict "title" (partial "timelinejs/parse-slide.html" .)) -}}
+{{- end -}}
+
+{{- with $raw.events -}}
+  {{- $events := slice -}}
+  {{- range . -}}
+    {{- $events = $events | append (partial "timelinejs/parse-slide.html" .) -}}
+  {{- end -}}
+  {{- $timeline = merge $timeline (dict "events" $events) -}}
+{{- end -}}
+
+{{- with $raw.eras -}}
+  {{- $eras := slice -}}
+  {{- range . -}}
+    {{- $eras = $eras | append (partial "timelinejs/parse-slide.html" .) -}}
+  {{- end -}}
+  {{- $timeline = merge $timeline (dict "eras" $eras) -}}
+{{- end -}}
+
+{{/* Pass through scale and other top-level fields */}}
+{{- range $k, $v := $raw -}}
+  {{- if not (in (slice "title" "events" "eras") $k) -}}
+    {{- $timeline = merge $timeline (dict $k $v) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $timeline -}}

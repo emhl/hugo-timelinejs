@@ -1,0 +1,14 @@
+title:
+  headline: "Sh*t People Say (YAML)"
+  text: "People say stuff in YAML"
+  date: 2012-01-26
+events:
+  - date: 2011-12-12
+    end: 2011-01-27
+    headline: "Sh*t Graphic Designers Say"
+    media: "http://youtu.be/KsT3QTmsN5Q"
+  - date: 2012-01-26
+    end: 2012-01-27
+    headline: "Sh*t Politicians Say"
+    text: "<p>In true political fashion, his character rattles off common jargon heard from people running for office.</p>"
+    media: "http://youtu.be/u4XpeU9erbg"

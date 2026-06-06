@@ -26,9 +26,21 @@ add this to your hugo.toml or config.toml:
 
 ## Usage
 
-you need to crate a json file in the assets directory that follows the [specification](https://timeline.knightlab.com/docs/json-format.html)
+You can create a data file in the `assets` directory. This module supports the original [JSON specification](https://timeline.knightlab.com/docs/json-format.html) as well as a custom `YAML` format.
 
-and then you can embed it with the shortcode
+### Concise YAML Format
+
+Use YAML for a cleaner authoring experience. The module automatically transpiles YAML files to the required JSON.
+
+See the [YAML Format Documentation](docs/YAML_FORMAT.md) for available fields and examples.
+
+### Embedding
+
+Embed the timeline with the shortcode:
+```hugo
+{{< timelinejs "timelines/history.yaml" >}}
+```
+or for JSON:
 ```hugo
 {{< timelinejs "timelines/example.json" >}}
 ```

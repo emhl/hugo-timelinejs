@@ -1,0 +1,44 @@
+{{- $s := . -}}
+{{- $res := dict -}}
+
+{{/* Text */}}
+{{- $headline := $s.headline | default "" -}}
+{{- $text := $s.text | default "" -}}
+{{- if or $headline $text -}}
+  {{- $res = merge $res (dict "text" (dict "headline" $headline "text" $text)) -}}
+{{- end -}}
+
+{{/* Dates */}}
+{{- with $s.date -}}
+  {{- $res = merge $res (dict "start_date" (partial "timelinejs/parse-date.html" .)) -}}
+{{- end -}}
+{{- with $s.end -}}
+  {{- $res = merge $res (dict "end_date" (partial "timelinejs/parse-date.html" .)) -}}
+{{- end -}}
+
+{{/* Media */}}
+{{- with $s.media -}}
+  {{- if reflect.IsMap . -}}
+    {{- $res = merge $res (dict "media" .) -}}
+  {{- else -}}
+    {{- $res = merge $res (dict "media" (dict "url" .)) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Background */}}
+{{- with $s.background -}}
+  {{- if reflect.IsMap . -}}
+    {{- $res = merge $res (dict "background" .) -}}
+  {{- else -}}
+    {{- $res = merge $res (dict "background" (dict "url" .)) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Pass through other fields */}}
+{{- range $k, $v := $s -}}
+  {{- if not (in (slice "headline" "text" "date" "end" "media" "background") $k) -}}
+    {{- $res = merge $res (dict $k $v) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $res -}}
