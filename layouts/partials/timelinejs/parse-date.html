@@ -1,19 +1,26 @@
 {{- $d := . -}}
-{{- if reflect.IsTime $d -}}
-  {{- return dict "year" $d.Year "month" (int $d.Month) "day" $d.Day "hour" $d.Hour "minute" $d.Minute "second" $d.Second -}}
-{{- end -}}
-{{- if reflect.IsMap $d -}}
-  {{- return $d -}}
+{{- $type := printf "%T" $d -}}
+{{- $res := false -}}
+
+{{- if or (eq $type "time.Time") (eq $type "*time.Time") (findRE ".*Time" $type) -}}
+  {{- $res = (dict "year" $d.Year "month" (int $d.Month) "day" $d.Day "hour" $d.Hour "minute" $d.Minute "second" $d.Second) -}}
+{{- else if findRE "^(map\\[string\\]interface \\{\\}|.*Params)$" $type -}}
+  {{- $res = $d -}}
+{{- else -}}
+  {{- $s := string $d -}}
+  {{- if findRE `^\d{4}$` $s -}}
+    {{- $res = (dict "year" (int $s)) -}}
+  {{- else -}}
+    {{- $t := false -}}
+    {{- if findRE `^\d{4}-\d{2}-\d{2}` $s -}}
+      {{- $t = time $s -}}
+    {{- end -}}
+    {{- if $t -}}
+      {{- $res = (dict "year" $t.Year "month" (int $t.Month) "day" $t.Day "hour" $t.Hour "minute" $t.Minute "second" $t.Second) -}}
+    {{- else -}}
+      {{- $res = (dict "display_date" $s) -}}
+    {{- end -}}
+  {{- end -}}
 {{- end -}}
 
-{{- $s := string $d -}}
-{{- if findRE `^\d{4}$` $s -}}
-  {{- return dict "year" (int $s) -}}
-{{- end -}}
-
-{{- $t := time $s -}}
-{{- if $t -}}
-  {{- return dict "year" $t.Year "month" (int $t.Month) "day" $t.Day "hour" $t.Hour "minute" $t.Minute "second" $t.Second -}}
-{{- end -}}
-
-{{- return dict "display_date" $s -}}
+{{- return $res -}}
