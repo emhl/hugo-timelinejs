@@ -1,35 +1,63 @@
-{{ $timelineStyles := resources.Get "timelinejs/css/timeline.css" | minify | fingerprint -}}
+{{- $timelineStyles := resources.Get "timelinejs/css/timeline.css" | minify | fingerprint -}}
 <link title="timeline-styles" rel="stylesheet"  href="{{ $timelineStyles.RelPermalink }}" {{ printf "integrity=%q" $timelineStyles.Data.Integrity | safeHTMLAttr }}>
-{{ $timelineScript := resources.Get "timelinejs/js/timeline.js" | fingerprint -}}
+{{- $timelineScript := resources.Get "timelinejs/js/timeline.js" | fingerprint -}}
 <script src="{{ $timelineScript.RelPermalink }}" {{ printf "integrity=%q" $timelineScript.Data.Integrity | safeHTMLAttr }} type="text/javascript"></script>
 
-{{ $width := .Get "width" | default "100%" }}
-{{ $height := .Get "height" | default "600px" }}
-{{ $data := .Get "data" | default (.Get 0) | default "timelines/example.yaml" }}
-{{ $hashBookmark := .Get "hashBookmark" | default "false" }}
-{{ $font := .Get "font" | default "" }}
-{{ $theme := .Get "theme" | default "" }}
-{{ $lang := .Get "lang" | default .Page.Language.Lang | default "en" }}
+{{- $width := .Get "width" | default "100%" -}}
+{{- $height := .Get "height" | default "600px" -}}
+{{- $data := .Get "data" | default (.Get 0) | default "timelines/example.yaml" -}}
 
-{{ $dataRes := resources.Get $data }}
-{{ $dataJSON := "" }}
-{{ if $dataRes }}
-    {{ if or (strings.HasSuffix $data ".yaml") (strings.HasSuffix $data ".yml") }}
-        {{ $dataJSON = partial "timelinejs/transpile.html" ($dataRes | unmarshal) | jsonify }}
-    {{ else }}
-        {{ $dataJSON = $dataRes.Content }}
-    {{ end }}
-{{ end }}
+{{- /* Initialize options with defaults */ -}}
+{{- $options := dict "script_path" ("/timelinejs/js" | absURL) "language" (.Page.Language.Lang | default "en") -}}
 
-<div id='timeline-embed' style="width {{$width}}; height: {{$height}}"></div>
+{{- /* Strings */ -}}
+{{- range slice "width" "height" "font" "theme" "timenav_position" "base_class" "default_bg_color" "layout" "ga_property_id" "ease" -}}
+    {{- $val := $.Get . -}}
+    {{- if $val }}{{ $options = merge $options (dict . $val) }}{{ end -}}
+{{- end -}}
+
+{{- /* Booleans */ -}}
+{{- range slice "hash_bookmark" "start_at_end" "track_resize" "debug" "use_bc" "dragging" "touch_dragging" -}}
+    {{- $val := $.Get . -}}
+    {{- if ne $val "" -}}
+        {{- $options = merge $options (dict . (eq $val "true")) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- /* Numbers */ -}}
+{{- range slice "start_at_slide" "timenav_height" "timenav_height_percentage" "timenav_height_min" "timenav_mobile_height_percentage" "scale_factor" "optimal_tick_width" "initial_zoom" "duration" "marker_height_min" "marker_width_min" "marker_padding" -}}
+    {{- $val := $.Get . -}}
+    {{- if $val }}{{ $options = merge $options (dict . (cast.ToFloat $val)) }}{{ end -}}
+{{- end -}}
+
+{{- /* Arrays */ -}}
+{{- with .Get "zoom_sequence" -}}
+    {{- $nums := slice -}}
+    {{- range (split . ",") }}{{ $nums = $nums | append (cast.ToFloat (trim . " ")) }}{{ end -}}
+    {{- $options = merge $options (dict "zoom_sequence" $nums) -}}
+{{- end -}}
+{{- with .Get "track_events" -}}
+    {{- $events := slice -}}
+    {{- range (split . ",") }}{{ $events = $events | append (trim . " ") }}{{ end -}}
+    {{- $options = merge $options (dict "track_events" $events) -}}
+{{- end -}}
+
+{{- $dataRes := resources.Get $data -}}
+{{- $dataJSON := "" -}}
+{{- if $dataRes -}}
+    {{- if or (strings.HasSuffix $data ".yaml") (strings.HasSuffix $data ".yml") -}}
+        {{- $dataJSON = partial "timelinejs/transpile.html" ($dataRes | unmarshal) | jsonify -}}
+    {{- else -}}
+        {{- $dataJSON = $dataRes.Content -}}
+    {{- end -}}
+{{- end -}}
+
+{{- $id := printf "timeline-%d" .Ordinal -}}
+<div id="{{ $id }}" style="width: {{$width}}; height: {{$height}}"></div>
 <script type="text/javascript">
-    data = {{ $dataJSON | safeJS }}
-    options = {
-	hash_bookmark: {{$hashBookmark}},
-    font: "{{$font}}",
-    theme: "{{$theme}}",
-    language: "{{$lang}}",
-    script_path: "/timelinejs/js",
-    }
-    timeline = new TL.Timeline('timeline-embed', data, options);
+    (function() {
+        var data = {{ $dataJSON | safeJS }};
+        var options = {{ $options | jsonify | safeJS }};
+        new TL.Timeline('{{ $id }}', data, options);
+    })();
 </script>
