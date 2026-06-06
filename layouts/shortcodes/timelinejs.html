@@ -11,9 +11,15 @@
 {{- $options := dict "script_path" ("/timelinejs/js" | absURL) "language" (.Page.Language.Lang | default "en") -}}
 
 {{- /* Strings */ -}}
-{{- range slice "width" "height" "font" "theme" "timenav_position" "base_class" "default_bg_color" "layout" "ga_property_id" "ease" -}}
+{{- range slice "width" "height" "theme" "timenav_position" "base_class" "default_bg_color" "layout" "ga_property_id" "ease" -}}
     {{- $val := $.Get . -}}
     {{- if $val }}{{ $options = merge $options (dict . $val) }}{{ end -}}
+{{- end -}}
+{{- $font := .Get "font" | default "false" -}}
+{{- if eq $font "false" -}}
+    {{- $options = merge $options (dict "font" nil) -}}
+{{- else if $font -}}
+    {{- $options = merge $options (dict "font" $font) -}}
 {{- end -}}
 
 {{- /* Booleans */ -}}

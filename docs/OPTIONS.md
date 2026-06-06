@@ -12,7 +12,7 @@ All options should be passed using **snake_case**.
 | `width` | String | `100%` | Width of the timeline. |
 | `height` | String | `600px` | Height of the timeline. |
 | `language` | String | Page language | [Language code](https://github.com/NUKnightLab/TimelineJS3/tree/master/src/js/language/locale) for the interface. |
-| `font` | String | (Default) | Name of a supported font set. |
+| `font` | String | `false` | Name of a supported font set. Defaults to `"false"` to disable automatic font CSS loading (since no fonts are bundled). |
 | `theme` | String | (Default) | Name of a supported theme. |
 | `hash_bookmark` | Boolean | `false` | If `true`, the URL hash will be updated to reflect the current slide. |
 | `start_at_end` | Boolean | `false` | If `true`, the timeline will start at the last slide. |
