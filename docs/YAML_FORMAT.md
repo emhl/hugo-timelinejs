@@ -2,9 +2,17 @@
 
 This module allows you to define timelines using a concise YAML format, which is automatically transpiled to the official TimelineJS JSON format.
 
+## JSON Schema
+
+To get autocompletion and validation in your editor (like VS Code), add the following line to the top of your YAML file:
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/emhl/hugo-timelinejs/main/docs/schema.json
+```
+
 **Key simplifications:**
 - **Flattened Text:** Use `headline` and `text` directly on the slide object.
-- **Smart Dates:** Use `date` (start) and `end` (end). Supports Hugo date objects, "YYYY-MM-DD" strings, or just "YYYY".
+- **Smart Dates:** Use `date` (start) and `end` (end). Supports Hugo date objects, "YYYY-MM-DD", "YYYY-MM", or just "YYYY".
 - **Simple Media:** Use `media` for just the URL, or as a map for full options (`url`, `caption`, `credit`, etc.).
 - **Simple Background:** Use `background` for just the URL/color, or as a map.
 ## Slide Structure (Title, Events, and Eras)

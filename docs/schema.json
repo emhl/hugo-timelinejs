@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/emhl/hugo-timelinejs/main/docs/schema.json",
+  "title": "Hugo TimelineJS YAML Format",
+  "description": "JSON Schema for the concise YAML format used by the hugo-timelinejs module.",
+  "type": "object",
+  "properties": {
+    "title": {
+      "description": "The title slide of the timeline.",
+      "$ref": "#/definitions/slide"
+    },
+    "events": {
+      "description": "An array of event slides.",
+      "type": "array",
+      "items": {
+        "allOf": [{ "$ref": "#/definitions/slide" }, { "required": ["date"] }]
+      }
+    },
+    "eras": {
+      "description": "An array of era slides, used to group events in the navigation.",
+      "type": "array",
+      "items": {
+        "allOf": [
+          { "$ref": "#/definitions/slide" },
+          { "required": ["date", "end"] }
+        ]
+      }
+    },
+    "scale": {
+      "description": "The scale of the timeline.",
+      "type": "string",
+      "enum": ["human", "cosmological"]
+    }
+  },
+  "required": ["events"],
+  "definitions": {
+    "slide": {
+      "type": "object",
+      "properties": {
+        "headline": {
+          "description": "The headline of the slide. Supports Markdown.",
+          "type": "string"
+        },
+        "text": {
+          "description": "The body text of the slide. Supports Markdown.",
+          "type": "string"
+        },
+        "date": {
+          "description": "The start date of the slide. Supports YYYY, YYYY-MM-DD, or a full date object.",
+          "$ref": "#/definitions/date"
+        },
+        "end": {
+          "description": "The end date of the slide. Supports YYYY, YYYY-MM-DD, or a full date object.",
+          "$ref": "#/definitions/date"
+        },
+        "media": {
+          "description": "Media associated with the slide. Can be a URL string or a full media object.",
+          "$ref": "#/definitions/media"
+        },
+        "background": {
+          "description": "Background for the slide. Can be a color/URL string or a full background object.",
+          "$ref": "#/definitions/background"
+        },
+        "group": {
+          "description": "Visual group for the event. Supports Markdown.",
+          "type": "string"
+        },
+        "display_date": {
+          "description": "Custom date string to display instead of the parsed date. Supports Markdown.",
+          "type": "string"
+        },
+        "unique_id": {
+          "description": "A unique identifier for the slide, used for deep linking.",
+          "type": "string"
+        },
+        "autofocus": {
+          "description": "If true, the timeline will focus on this slide when loaded.",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "date": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Date as a string (YYYY, YYYY-MM, YYYY-MM-DD, ISO 8601, or a custom display_date fallback)."
+        },
+        {
+          "type": "integer",
+          "description": "Year as an integer."
+        },
+        {
+          "type": "object",
+          "description": "Full date object for precision.",
+          "properties": {
+            "year": { "type": "integer" },
+            "month": { "type": "integer", "minimum": 1, "maximum": 12 },
+            "day": { "type": "integer", "minimum": 1, "maximum": 31 },
+            "hour": { "type": "integer", "minimum": 0, "maximum": 23 },
+            "minute": { "type": "integer", "minimum": 0, "maximum": 59 },
+            "second": { "type": "integer", "minimum": 0, "maximum": 59 },
+            "millisecond": { "type": "integer", "minimum": 0 },
+            "display_date": { "type": "string" }
+          },
+          "required": ["year"]
+        }
+      ]
+    },
+    "media": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "URL to the media."
+        },
+        {
+          "type": "object",
+          "description": "Full media object with caption, credit, etc.",
+          "properties": {
+            "url": { "type": "string" },
+            "caption": {
+              "type": "string",
+              "description": "Markdown supported."
+            },
+            "credit": {
+              "type": "string",
+              "description": "Markdown supported."
+            },
+            "alt": { "type": "string" },
+            "link": { "type": "string" },
+            "link_target": { "type": "string" },
+            "title": { "type": "string" },
+            "thumbnail": { "type": "string" }
+          },
+          "required": ["url"]
+        }
+      ]
+    },
+    "background": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Color or URL to the background image."
+        },
+        {
+          "type": "object",
+          "description": "Full background object.",
+          "properties": {
+            "url": { "type": "string" },
+            "color": { "type": "string" },
+            "opacity": {
+              "type": "string",
+              "description": "e.g., '10', '50'"
+            },
+            "position": {
+              "type": "string",
+              "description": "CSS background-position e.g. 'bottom right'"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
